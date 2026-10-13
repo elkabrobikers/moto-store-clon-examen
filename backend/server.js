@@ -2,6 +2,9 @@ const express = require("express");
 const app = express();
 const PORT = 3000;
 
+// IMPORTANTE: Importar el enrutador de la API que creamos en la carpeta routes
+const apiRoutes = require("./routes/apiRoutes");
+
 // Ruta 1: Nombre de tu sistema
 app.get("/", (req, res) => {
   res.send("Bienvenido al Sistema Web de Venta de Motos, Repuestos y Accesorios");
@@ -21,6 +24,9 @@ app.get("/contacto", (req, res) => {
 app.get("/motos", (req, res) => {
   res.send("Módulo de gestión y catálogo de motocicletas, repuestos y accesorios.");
 });
+
+// IMPORTANTE: Conectar las rutas de la API bajo el prefijo /api
+app.use("/api", apiRoutes);
 
 app.listen(PORT, () => {
   console.log(`Servidor ejecutándose en http://localhost:${PORT}`);
