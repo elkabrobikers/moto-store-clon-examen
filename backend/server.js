@@ -1,33 +1,37 @@
+
 const express = require("express");
 const app = express();
 const PORT = 3000;
 
-// IMPORTANTE: Importar el enrutador de la API que creamos en la carpeta routes
 const apiRoutes = require("./routes/apiRoutes");
 
-// Ruta 1: Nombre de tu sistema
+// Permitir que el servidor reciba datos JSON
+app.use(express.json());
+
+// Ruta 1: Nombre del sistema
 app.get("/", (req, res) => {
-  res.send("Bienvenido al Sistema Web de Venta de Motos, Repuestos y Accesorios");
+    res.send("Bienvenido al Sistema Web de Venta de Motos, Repuestos y Accesorios");
 });
 
-// Ruta 2: /info (Descripción de tu sistema)
+// Ruta 2: Información del sistema
 app.get("/info", (req, res) => {
-  res.send("Sistema especializado en la comercialización de motocicletas de diversas cilindradas, repuestos originales y accesorios de seguridad.");
+    res.send("Sistema especializado en la comercialización de motocicletas de diversas cilindradas, repuestos originales y accesorios de seguridad.");
 });
 
-// Ruta 3: /contacto (Información de contacto ficticia)
+// Ruta 3: Información de contacto
 app.get("/contacto", (req, res) => {
-  res.send("Correo: contacto@ventademotosweb.com | Teléfono: +591 4-4000000");
+    res.send("Correo: contacto@ventademotosweb.com | Teléfono: +591 4-4000000");
 });
 
-// Ruta relacionada con una funcionalidad principal del proyecto
+// Ruta 4: Módulo de motocicletas
 app.get("/motos", (req, res) => {
-  res.send("Módulo de gestión y catálogo de motocicletas, repuestos y accesorios.");
+    res.send("Módulo de gestión y catálogo de motocicletas, repuestos y accesorios.");
 });
 
-// IMPORTANTE: Conectar las rutas de la API bajo el prefijo /api
+// Conectar las rutas de la API
 app.use("/api", apiRoutes);
 
+// Iniciar servidor
 app.listen(PORT, () => {
-  console.log(`Servidor ejecutándose en http://localhost:${PORT}`);
+    console.log(`Servidor ejecutándose en http://localhost:${PORT}`);
 });
