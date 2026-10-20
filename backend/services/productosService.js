@@ -3,7 +3,7 @@ const { PrismaClient } = require("@prisma/client");
 
 const prisma = new PrismaClient();
 
-const obtenerProductos = async () => {
+const listarProductos = async () => {
     return await prisma.producto.findMany({
         orderBy: {
             id: "asc"
@@ -19,7 +19,7 @@ const obtenerProductoPorId = async (id) => {
     });
 };
 
-const crearProducto = async (datos) => {
+const registrarProducto = async (datos) => {
     return await prisma.producto.create({
         data: {
             nombre: datos.nombre,
@@ -63,9 +63,9 @@ const eliminarProducto = async (id) => {
 };
 
 module.exports = {
-    obtenerProductos,
+    listarProductos,
     obtenerProductoPorId,
-    crearProducto,
+    registrarProducto,
     actualizarProducto,
     eliminarProducto
 };

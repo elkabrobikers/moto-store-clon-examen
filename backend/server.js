@@ -1,9 +1,14 @@
 
 const express = require("express");
+const helmet = require("helmet");
+
 const app = express();
 const PORT = 3000;
 
 const apiRoutes = require("./routes/apiRoutes");
+
+// Activar encabezados HTTP de seguridad
+app.use(helmet());
 
 // Permitir que el servidor reciba datos JSON
 app.use(express.json());
@@ -28,7 +33,7 @@ app.get("/motos", (req, res) => {
     res.send("Módulo de gestión y catálogo de motocicletas, repuestos y accesorios.");
 });
 
-// Conectar las rutas de la API
+// Conectar las rutas de la API REST
 app.use("/api", apiRoutes);
 
 // Iniciar servidor
