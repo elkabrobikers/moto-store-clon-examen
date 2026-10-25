@@ -1,6 +1,8 @@
 
 import { useState } from "react";
 
+const API_URL = (import.meta.env.VITE_API_URL || "").replace(/\/+$/, "");
+
 function FormularioProducto({ usuario, token, onProductoRegistrado }) {
   const [nombre, setNombre] = useState("");
   const [precio, setPrecio] = useState("");
@@ -37,7 +39,7 @@ function FormularioProducto({ usuario, token, onProductoRegistrado }) {
     try {
       setGuardando(true);
 
-      const respuesta = await fetch("/api/productos", {
+      const respuesta = await fetch(`${API_URL}/api/productos`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -53,7 +55,9 @@ function FormularioProducto({ usuario, token, onProductoRegistrado }) {
       const datos = await respuesta.json();
 
       if (!respuesta.ok) {
-        throw new Error(datos.mensaje || "Error al registrar el producto");
+        throw new Error(
+          datos.mensaje || "Error al registrar el producto"
+        );
       }
 
       setMensaje("Producto registrado correctamente.");

@@ -1,6 +1,8 @@
 
 import { useEffect, useState } from "react";
 
+const API_URL = (import.meta.env.VITE_API_URL || "").replace(/\/+$/, "");
+
 function Productos({ usuario, token }) {
   const [productos, setProductos] = useState([]);
   const [cargando, setCargando] = useState(true);
@@ -18,13 +20,18 @@ function Productos({ usuario, token }) {
     try {
       setError("");
 
-      const respuesta = await fetch("/api/productos");
+      const respuesta = await fetch(`${API_URL}/api/productos`);
 
       if (!respuesta.ok) {
         throw new Error("No se pudieron cargar los productos");
       }
 
       const datos = await respuesta.json();
+
+      if (!Array.isArray(datos)) {
+        throw new Error("La respuesta del catálogo no es válida");
+      }
+
       setProductos(datos);
     } catch (error) {
       setError(error.message);
@@ -91,23 +98,28 @@ function Productos({ usuario, token }) {
       setError("");
       setMensaje("");
 
-      const respuesta = await fetch(`/api/productos/${editando}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`
-        },
-        body: JSON.stringify({
-          nombre: nombre.trim(),
-          precio: precioNumero,
-          categoria: categoria.trim()
-        })
-      });
+      const respuesta = await fetch(
+        `${API_URL}/api/productos/${editando}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
+          },
+          body: JSON.stringify({
+            nombre: nombre.trim(),
+            precio: precioNumero,
+            categoria: categoria.trim()
+          })
+        }
+      );
 
       const datos = await respuesta.json();
 
       if (!respuesta.ok) {
-        throw new Error(datos.mensaje || "Error al actualizar el producto");
+        throw new Error(
+          datos.mensaje || "Error al actualizar el producto"
+        );
       }
 
       cancelarEdicion();
@@ -139,17 +151,22 @@ function Productos({ usuario, token }) {
       setError("");
       setMensaje("");
 
-      const respuesta = await fetch(`/api/productos/${id}`, {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${token}`
+      const respuesta = await fetch(
+        `${API_URL}/api/productos/${id}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
         }
-      });
+      );
 
       const datos = await respuesta.json();
 
       if (!respuesta.ok) {
-        throw new Error(datos.mensaje || "Error al eliminar el producto");
+        throw new Error(
+          datos.mensaje || "Error al eliminar el producto"
+        );
       }
 
       if (editando === id) {
@@ -175,9 +192,17 @@ function Productos({ usuario, token }) {
 
       {cargando && <p>Cargando productos...</p>}
 
-      {error && <p style={{ color: "#ff4d6d" }}>{error}</p>}
+      {error && (
+        <p style={{ color: "#ff4d6d" }} role="alert">
+          {error}
+        </p>
+      )}
 
-      {mensaje && <p style={{ color: "#4ade80" }}>{mensaje}</p>}
+      {mensaje && (
+        <p style={{ color: "#4ade80" }} role="status">
+          {mensaje}
+        </p>
+      )}
 
       {!cargando && !error && productos.length === 0 && (
         <p>No hay productos registrados todavía.</p>
@@ -214,15 +239,28 @@ function Productos({ usuario, token }) {
                     onChange={(e) => setCategoria(e.target.value)}
                     required
                   >
-                    <option value="">Selecciona una categoría</option>
-                    <option value="Motocicletas">Motocicletas</option>
-                    <option value="Repuestos">Repuestos</option>
-                    <option value="Accesorios">Accesorios</option>
+                    <option value="">
+                      Selecciona una categoría
+                    </option>
+                    <option value="Motocicletas">
+                      Motocicletas
+                    </option>
+                    <option value="Repuestos">
+                      Repuestos
+                    </option>
+                    <option value="Accesorios">
+                      Accesorios
+                    </option>
                   </select>
 
                   <div className="acciones-producto">
-                    <button type="submit" disabled={procesando}>
-                      {procesando ? "Guardando..." : "Guardar cambios"}
+                    <button
+                      type="submit"
+                      disabled={procesando}
+                    >
+                      {procesando
+                        ? "Guardando..."
+                        : "Guardar cambios"}
                     </button>
 
                     <button
@@ -237,14 +275,20 @@ function Productos({ usuario, token }) {
               ) : (
                 <>
                   <h3>{producto.nombre}</h3>
-                  <p>Categoría: {producto.categoria}</p>
-                  <p>Precio: Bs. {producto.precio}</p>
+                  <p>
+                    Categoría: {producto.categoria}
+                  </p>
+                  <p>
+                    Precio: Bs. {producto.precio}
+                  </p>
 
                   {esAdmin && (
                     <div className="acciones-producto">
                       <button
                         type="button"
-                        onClick={() => iniciarEdicion(producto)}
+                        onClick={() =>
+                          iniciarEdicion(producto)
+                        }
                         disabled={procesando}
                       >
                         ✏️ Editar
@@ -252,7 +296,9 @@ function Productos({ usuario, token }) {
 
                       <button
                         type="button"
-                        onClick={() => eliminarProducto(producto.id)}
+                        onClick={() =>
+                          eliminarProducto(producto.id)
+                        }
                         disabled={procesando}
                       >
                         🗑️ Eliminar

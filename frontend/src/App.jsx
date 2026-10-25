@@ -4,6 +4,8 @@ import Productos from "./components/Productos";
 import FormularioProducto from "./components/FormularioProducto";
 import "./App.css";
 
+const API_URL = (import.meta.env.VITE_API_URL || "").replace(/\/+$/, "");
+
 function App() {
   const [usuario, setUsuario] = useState(null);
   const [token, setToken] = useState("");
@@ -39,7 +41,7 @@ function App() {
       setError("");
       setMensaje("");
 
-      const respuesta = await fetch("/api/auth/login", {
+      const respuesta = await fetch(`${API_URL}/api/auth/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -93,7 +95,7 @@ function App() {
       setError("");
       setMensaje("");
 
-      const respuesta = await fetch("/api/auth/registro", {
+      const respuesta = await fetch(`${API_URL}/api/auth/registro`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
