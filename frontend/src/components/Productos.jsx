@@ -1,7 +1,7 @@
 
 import { useEffect, useState } from "react";
 
-function Productos() {
+function Productos({ usuario, token }) {
   const [productos, setProductos] = useState([]);
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState("");
@@ -11,6 +11,8 @@ function Productos() {
   const [precio, setPrecio] = useState("");
   const [categoria, setCategoria] = useState("");
   const [procesando, setProcesando] = useState(false);
+
+  const esAdmin = usuario?.rol === "admin" && Boolean(token);
 
   const cargarProductos = async () => {
     try {
@@ -35,7 +37,20 @@ function Productos() {
     cargarProductos();
   }, []);
 
+  useEffect(() => {
+    if (!esAdmin) {
+      setEditando(null);
+      setNombre("");
+      setPrecio("");
+      setCategoria("");
+    }
+  }, [esAdmin]);
+
   const iniciarEdicion = (producto) => {
+    if (!esAdmin) {
+      return;
+    }
+
     setEditando(producto.id);
     setNombre(producto.nombre);
     setPrecio(String(producto.precio));
@@ -53,6 +68,11 @@ function Productos() {
 
   const guardarCambios = async (e) => {
     e.preventDefault();
+
+    if (!esAdmin) {
+      setError("Debes iniciar sesión como administrador.");
+      return;
+    }
 
     const precioNumero = Number(precio);
 
@@ -74,7 +94,8 @@ function Productos() {
       const respuesta = await fetch(`/api/productos/${editando}`, {
         method: "PUT",
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`
         },
         body: JSON.stringify({
           nombre: nombre.trim(),
@@ -100,6 +121,11 @@ function Productos() {
   };
 
   const eliminarProducto = async (id) => {
+    if (!esAdmin) {
+      setError("Debes iniciar sesión como administrador.");
+      return;
+    }
+
     const confirmar = window.confirm(
       "¿Estás seguro de que deseas eliminar este producto?"
     );
@@ -114,7 +140,10 @@ function Productos() {
       setMensaje("");
 
       const respuesta = await fetch(`/api/productos/${id}`, {
-        method: "DELETE"
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
       });
 
       const datos = await respuesta.json();
@@ -140,6 +169,10 @@ function Productos() {
     <section id="productos">
       <h2>Nuestros productos</h2>
 
+      {esAdmin && (
+        <p>Modo administrador: puedes editar y eliminar productos.</p>
+      )}
+
       {cargando && <p>Cargando productos...</p>}
 
       {error && <p style={{ color: "#ff4d6d" }}>{error}</p>}
@@ -154,7 +187,7 @@ function Productos() {
         <div className="lista-productos">
           {productos.map((producto) => (
             <div className="producto" key={producto.id}>
-              {editando === producto.id ? (
+              {esAdmin && editando === producto.id ? (
                 <form onSubmit={guardarCambios}>
                   <h3>Editar producto</h3>
 
@@ -207,23 +240,25 @@ function Productos() {
                   <p>Categoría: {producto.categoria}</p>
                   <p>Precio: Bs. {producto.precio}</p>
 
-                  <div className="acciones-producto">
-                    <button
-                      type="button"
-                      onClick={() => iniciarEdicion(producto)}
-                      disabled={procesando}
-                    >
-                      ✏️ Editar
-                    </button>
+                  {esAdmin && (
+                    <div className="acciones-producto">
+                      <button
+                        type="button"
+                        onClick={() => iniciarEdicion(producto)}
+                        disabled={procesando}
+                      >
+                        ✏️ Editar
+                      </button>
 
-                    <button
-                      type="button"
-                      onClick={() => eliminarProducto(producto.id)}
-                      disabled={procesando}
-                    >
-                      🗑️ Eliminar
-                    </button>
-                  </div>
+                      <button
+                        type="button"
+                        onClick={() => eliminarProducto(producto.id)}
+                        disabled={procesando}
+                      >
+                        🗑️ Eliminar
+                      </button>
+                    </div>
+                  )}
                 </>
               )}
             </div>

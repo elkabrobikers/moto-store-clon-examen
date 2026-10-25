@@ -25,6 +25,7 @@ services:
     environment:
       DATABASE_URL: postgresql://motostore:${POSTGRES_PASSWORD:?Configura POSTGRES_PASSWORD}@db:5432/motostore?schema=public
       NODE_ENV: production
+      JWT_SECRET: ${JWT_SECRET:?Configura JWT_SECRET}
     depends_on:
       db:
         condition: service_healthy

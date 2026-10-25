@@ -26,8 +26,6 @@ body {
   min-height: 100vh;
 }
 
-/* ENCABEZADO */
-
 header {
   background: linear-gradient(135deg, #171b25, #08090d);
   padding: 45px 20px;
@@ -48,13 +46,12 @@ header p {
   margin: 0;
 }
 
-/* NAVEGACION */
-
 nav {
   display: flex;
   justify-content: center;
+  align-items: center;
   flex-wrap: wrap;
-  gap: 35px;
+  gap: 25px;
   padding: 20px;
   background: #151923;
   border-bottom: 1px solid #303541;
@@ -72,7 +69,26 @@ nav a:hover {
   color: #ff3449;
 }
 
-/* CONTENIDO PRINCIPAL */
+nav button {
+  background: #e11d2e;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 16px;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+nav button:hover {
+  background: #b91c2d;
+}
+
+.usuario-nav {
+  color: #4ade80;
+  font-size: 14px;
+  font-weight: bold;
+}
 
 main {
   max-width: 1100px;
@@ -92,7 +108,113 @@ main > p {
   line-height: 1.7;
 }
 
-/* PRODUCTOS */
+.panel-auth {
+  max-width: 480px;
+  margin: 45px auto;
+  padding: 35px;
+  background: #171b25;
+  border: 1px solid #303541;
+  border-radius: 18px;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.25);
+}
+
+.panel-auth h2 {
+  margin: 0 0 25px;
+  color: #ff3449;
+  font-size: 28px;
+}
+
+.panel-auth form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.panel-auth label {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  text-align: left;
+  color: #d1d5db;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.panel-auth input {
+  width: 100%;
+  padding: 14px;
+  background: #0b0d12;
+  color: #ffffff;
+  border: 1px solid #414b5e;
+  border-radius: 9px;
+  font-size: 16px;
+}
+
+.panel-auth input:focus {
+  outline: none;
+  border-color: #ff304f;
+}
+
+.panel-auth button {
+  padding: 14px 18px;
+  background: #e11d2e;
+  color: #ffffff;
+  border: none;
+  border-radius: 9px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.panel-auth button:hover {
+  background: #b91c2d;
+}
+
+.panel-auth button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.panel-auth .boton-secundario {
+  background: #303849;
+}
+
+.panel-auth .boton-secundario:hover {
+  background: #414b5e;
+}
+
+.panel-auth > p {
+  color: #b9bdc9;
+  margin-top: 24px;
+}
+
+.panel-usuario {
+  max-width: 650px;
+  margin: 35px auto;
+  padding: 25px;
+  background: #171b25;
+  border: 1px solid #303541;
+  border-radius: 15px;
+}
+
+.panel-usuario h2 {
+  margin-top: 0;
+  color: #4ade80;
+}
+
+.panel-usuario p {
+  color: #d1d5db;
+}
+
+.mensaje-exito {
+  color: #4ade80 !important;
+  font-weight: bold;
+}
+
+.mensaje-error {
+  color: #ff4d6d !important;
+  font-weight: bold;
+}
 
 #productos {
   margin-top: 65px;
@@ -113,8 +235,6 @@ main > p {
   color: #b9bdc9;
   font-size: 17px;
 }
-
-/* LISTA DE PRODUCTOS */
 
 .lista-productos {
   display: grid;
@@ -148,8 +268,6 @@ main > p {
   line-height: 1.5;
 }
 
-/* BOTONES DE PRODUCTOS */
-
 .producto button,
 #productos button {
   padding: 11px 18px;
@@ -176,8 +294,6 @@ main > p {
   transform: none;
 }
 
-/* EDITAR Y ELIMINAR */
-
 .producto button:first-of-type {
   background: #2563eb;
 }
@@ -185,8 +301,6 @@ main > p {
 .producto button:nth-of-type(2) {
   background: #dc2626;
 }
-
-/* FORMULARIO DE EDICION */
 
 #productos form {
   max-width: 550px;
@@ -215,8 +329,6 @@ main > p {
   border-color: #ff304f;
 }
 
-/* GUARDAR CAMBIOS Y CANCELAR */
-
 #productos form button:first-of-type {
   background: #16a34a;
 }
@@ -224,8 +336,6 @@ main > p {
 #productos form button:nth-of-type(2) {
   background: #475569;
 }
-
-/* FORMULARIO DE REGISTRO */
 
 .formulario-producto {
   max-width: 650px;
@@ -261,12 +371,6 @@ main > p {
   font-size: 16px;
 }
 
-.formulario-producto input:focus,
-.formulario-producto select:focus {
-  outline: none;
-  border-color: #ff304f;
-}
-
 .formulario-producto button {
   padding: 16px;
   background: #ff304f;
@@ -276,7 +380,6 @@ main > p {
   font-size: 17px;
   font-weight: bold;
   cursor: pointer;
-  transition: background 0.3s;
 }
 
 .formulario-producto button:hover {
@@ -294,8 +397,6 @@ main > p {
   font-weight: bold;
 }
 
-/* PIE DE PAGINA */
-
 footer {
   padding: 25px 15px;
   text-align: center;
@@ -303,8 +404,6 @@ footer {
   background: #10131b;
   border-top: 1px solid #303541;
 }
-
-/* DISEÑO RESPONSIVE */
 
 @media (max-width: 600px) {
   header {
@@ -316,7 +415,11 @@ footer {
   }
 
   nav {
-    gap: 18px;
+    gap: 15px;
+  }
+
+  nav button {
+    padding: 9px 12px;
   }
 
   main {
@@ -339,13 +442,14 @@ footer {
     grid-template-columns: 1fr;
   }
 
-  .formulario-producto {
-    margin: 30px 15px;
+  .panel-auth {
+    margin: 30px auto;
     padding: 22px;
   }
 
-  .formulario-producto h2 {
-    font-size: 24px;
+  .formulario-producto {
+    margin: 30px 15px;
+    padding: 22px;
   }
 
   .producto button,

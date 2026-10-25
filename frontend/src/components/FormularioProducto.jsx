@@ -1,21 +1,36 @@
 
 import { useState } from "react";
 
-function FormularioProducto() {
+function FormularioProducto({ usuario, token, onProductoRegistrado }) {
   const [nombre, setNombre] = useState("");
   const [precio, setPrecio] = useState("");
   const [categoria, setCategoria] = useState("");
   const [mensaje, setMensaje] = useState("");
+  const [error, setError] = useState("");
   const [guardando, setGuardando] = useState(false);
+
+  const esAdmin = usuario?.rol === "admin" && Boolean(token);
 
   const registrarProducto = async (e) => {
     e.preventDefault();
+
     setMensaje("");
+    setError("");
+
+    if (!esAdmin) {
+      setError("No tienes permisos para registrar productos.");
+      return;
+    }
 
     const precioNumero = Number(precio);
 
-    if (!nombre.trim() || !categoria.trim() || !Number.isFinite(precioNumero) || precioNumero <= 0) {
-      setMensaje("Completa los datos e ingresa un precio mayor a cero.");
+    if (
+      !nombre.trim() ||
+      !categoria.trim() ||
+      !Number.isFinite(precioNumero) ||
+      precioNumero <= 0
+    ) {
+      setError("Completa los datos e ingresa un precio mayor a cero.");
       return;
     }
 
@@ -25,7 +40,8 @@ function FormularioProducto() {
       const respuesta = await fetch("/api/productos", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`
         },
         body: JSON.stringify({
           nombre: nombre.trim(),
@@ -44,12 +60,20 @@ function FormularioProducto() {
       setNombre("");
       setPrecio("");
       setCategoria("");
-    } catch (error) {
-      setMensaje(error.message);
+
+      if (onProductoRegistrado) {
+        onProductoRegistrado();
+      }
+    } catch (err) {
+      setError(err.message);
     } finally {
       setGuardando(false);
     }
   };
+
+  if (!esAdmin) {
+    return null;
+  }
 
   return (
     <section className="formulario-producto">
@@ -59,6 +83,7 @@ function FormularioProducto() {
         <input
           type="text"
           placeholder="Nombre del producto"
+          aria-label="Nombre del producto"
           value={nombre}
           onChange={(e) => setNombre(e.target.value)}
           required
@@ -67,6 +92,7 @@ function FormularioProducto() {
         <input
           type="number"
           placeholder="Precio en Bs."
+          aria-label="Precio en bolivianos"
           value={precio}
           onChange={(e) => setPrecio(e.target.value)}
           min="0.01"
@@ -77,6 +103,7 @@ function FormularioProducto() {
         <select
           value={categoria}
           onChange={(e) => setCategoria(e.target.value)}
+          aria-label="Categoría del producto"
           required
         >
           <option value="">Selecciona una categoría</option>
@@ -90,7 +117,17 @@ function FormularioProducto() {
         </button>
       </form>
 
-      {mensaje && <p>{mensaje}</p>}
+      {mensaje && (
+        <p style={{ color: "#4ade80" }} role="status">
+          {mensaje}
+        </p>
+      )}
+
+      {error && (
+        <p style={{ color: "#ff4d6d" }} role="alert">
+          {error}
+        </p>
+      )}
     </section>
   );
 }

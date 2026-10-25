@@ -19,6 +19,10 @@ COPY server.js ./
 COPY routes ./routes
 COPY controllers ./controllers
 COPY services ./services
+COPY middlewares ./middlewares
+COPY tests ./tests
+
+ENV NODE_ENV=production
 
 EXPOSE 3000
 

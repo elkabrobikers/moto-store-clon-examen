@@ -14,3 +14,13 @@ model Producto {
   precio    Float
   categoria String
 }
+
+model Usuario {
+  id           Int      @id @default(autoincrement())
+  nombre       String
+  correo       String   @unique
+  passwordHash String
+  rol          String   @default("cliente")
+  activo       Boolean  @default(true)
+  creadoEn     DateTime @default(now())
+}
