@@ -11,7 +11,8 @@ const validarProducto = (nombre, precio, categoria) => {
         nombre.trim().length >= 3 &&
         nombre.trim().length <= 120 &&
         typeof categoria === "string" &&
-        categoria.trim() !== "" &&
+        categoria.trim().length >= 1 &&
+        categoria.trim().length <= 40 &&
         typeof precio === "number" &&
         Number.isFinite(precio) &&
         precio > 0
@@ -29,7 +30,6 @@ const manejarError = (error, res) => {
 const listarProductos = async (req, res) => {
     try {
         const productos = await productosService.listarProductos();
-
         return res.status(200).json(productos);
     } catch (error) {
         return manejarError(error, res);
@@ -66,7 +66,7 @@ const registrarProducto = async (req, res) => {
 
         if (!validarProducto(nombre, precio, categoria)) {
             return res.status(400).json({
-                mensaje: "Datos inválidos. El nombre debe tener entre 3 y 120 caracteres, el precio debe ser positivo y la categoría es obligatoria."
+                mensaje: "Datos inválidos. El nombre debe tener entre 3 y 120 caracteres, el precio debe ser positivo y la categoría debe tener entre 1 y 40 caracteres."
             });
         }
 
@@ -98,7 +98,7 @@ const actualizarProducto = async (req, res) => {
 
         if (!validarProducto(nombre, precio, categoria)) {
             return res.status(400).json({
-                mensaje: "Datos inválidos. El nombre debe tener entre 3 y 120 caracteres, el precio debe ser positivo y la categoría es obligatoria."
+                mensaje: "Datos inválidos. El nombre debe tener entre 3 y 120 caracteres, el precio debe ser positivo y la categoría debe tener entre 1 y 40 caracteres."
             });
         }
 
