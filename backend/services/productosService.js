@@ -23,8 +23,9 @@ const registrarProducto = async (datos) => {
     return await prisma.producto.create({
         data: {
             nombre: datos.nombre,
-            precio: Number(datos.precio),
-            categoria: datos.categoria
+            precio: datos.precio,
+            categoria: datos.categoria,
+            stock: datos.stock
         }
     });
 };
@@ -42,8 +43,9 @@ const actualizarProducto = async (id, datos) => {
         },
         data: {
             nombre: datos.nombre,
-            precio: Number(datos.precio),
-            categoria: datos.categoria
+            precio: datos.precio,
+            categoria: datos.categoria,
+            stock: datos.stock
         }
     });
 };

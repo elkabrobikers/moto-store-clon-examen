@@ -13,6 +13,7 @@ model Producto {
   nombre    String
   precio    Float
   categoria String @db.VarChar(40)
+  stock     Int    @default(0)
 }
 
 model Usuario {
